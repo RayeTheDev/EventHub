@@ -1,4 +1,5 @@
 import { Schema, model, models } from "mongoose";
+import { Document } from "postcss";
 
 export interface Category extends Document {
   _id: string;
