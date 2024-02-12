@@ -1,6 +1,6 @@
 import Footer from "@/components/shared/Footer";
 import Header from "@/components/shared/Header";
-import { LucideDivideCircle } from "lucide-react";
+
 
 export default function RootLayout({
     children,

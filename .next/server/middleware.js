@@ -5643,8 +5643,8 @@ class router_Router {
         };
         if (true) {
             const { BloomFilter } = __webpack_require__(8595);
-            const staticFilterData = {"numItems":4,"errorRate":0.0001,"numBits":77,"numHashes":14,"bitArray":[1,1,0,0,0,1,0,0,0,1,0,1,1,1,1,1,1,1,0,0,1,1,1,0,1,1,0,0,0,0,0,0,0,1,1,1,0,1,1,0,0,0,0,1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,1,1,0,0,0,1,1,1,1,1,1,1,0,0,1,1]};
-            const dynamicFilterData = {"numItems":2,"errorRate":0.0001,"numBits":39,"numHashes":14,"bitArray":[1,0,0,0,1,0,0,0,0,1,1,0,0,1,0,0,1,1,1,1,1,0,1,0,0,1,0,0,0,0,1,1,1,0,1,0,1,0,1]};
+            const staticFilterData = {"numItems":7,"errorRate":0.0001,"numBits":135,"numHashes":14,"bitArray":[1,1,0,1,1,1,0,0,1,0,0,0,1,0,0,1,0,1,1,0,1,1,0,0,0,0,0,1,0,0,1,0,1,1,0,0,0,0,1,0,0,1,1,1,0,1,1,1,1,1,1,1,0,1,0,1,0,0,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,1,1,1,0,0,1,0,0,0,0,0,0,0,0,1,0,1,1,0,1,1,1,1,0,0,1,0,1,0,0,0,1,1,1,1,1,1,0,1,1,1,0,0,1,0,0,0,1,1,0,0,0]};
+            const dynamicFilterData = {"numItems":3,"errorRate":0.0001,"numBits":58,"numHashes":14,"bitArray":[1,1,0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,0,1,0,1,0,1,1,1,1,1,1,0,1,1,0,0,1,1,0,1,0,0,1,1,1,0,0,1,1,1,0,0,1,0,0,0,0,0,1,1,1]};
             if (staticFilterData == null ? void 0 : staticFilterData.numHashes) {
                 this._bfl_s = new BloomFilter(staticFilterData.numItems, staticFilterData.errorRate);
                 this._bfl_s.import(staticFilterData);
@@ -6038,7 +6038,7 @@ var AbstractAPI = class {
 };
 // src/util/path.ts
 var SEPARATOR = "/";
-var MULTIPLE_SEPARATOR_REGEX = new RegExp(SEPARATOR + "{1,}", "g");
+var MULTIPLE_SEPARATOR_REGEX = new RegExp("(?<!:)" + SEPARATOR + "{1,}", "g");
 function joinPaths(...args) {
     return args.filter((p)=>p).join(SEPARATOR).replace(MULTIPLE_SEPARATOR_REGEX, SEPARATOR);
 }
@@ -6655,7 +6655,7 @@ var UserAPI = class extends AbstractAPI {
 // src/constants.ts
 var API_URL = "https://api.clerk.dev";
 var API_VERSION = "v1";
-var USER_AGENT = `${"@clerk/backend"}@${"0.37.3"}`;
+var USER_AGENT = `${"@clerk/backend"}@${"0.38.1"}`;
 var MAX_CACHE_LAST_UPDATED_AT_SECONDS = 5 * 60;
 var Attributes = {
     AuthToken: "__clerkAuthToken",
@@ -8844,7 +8844,7 @@ function debugLogHeader(name) {
     return `[clerk debug start: ${name}]`;
 }
 function debugLogFooter(name) {
-    return `[clerk debug end: ${name}] (@clerk/nextjs=${"4.29.5"},next=${package_namespaceObject.i8})`;
+    return `[clerk debug end: ${name}] (@clerk/nextjs=${"4.29.7"},next=${package_namespaceObject.i8})`;
 }
 function truncate(str, maxLength) {
     const encoder = new TextEncoder();
@@ -9322,7 +9322,7 @@ const clerkClient = esm_Clerk({
     secretKey: SECRET_KEY,
     apiUrl: constants_API_URL,
     apiVersion: constants_API_VERSION,
-    userAgent: `${"@clerk/nextjs"}@${"4.29.5"}`,
+    userAgent: `${"@clerk/nextjs"}@${"4.29.7"}`,
     proxyUrl: PROXY_URL,
     domain: DOMAIN,
     isSatellite: IS_SATELLITE
@@ -10285,10 +10285,10 @@ const esm_withClerkMiddleware = withClerkMiddleware;
 /* harmony default export */ const middleware = (esm_authMiddleware({
     publicRoutes: [
         "/",
-        "events/:id",
-        "api/webhook/clerk",
-        "api/webhook/stripe",
-        "api/uploadthing"
+        "/events/:id",
+        "/api/webhook/clerk",
+        "/api/webhook/stripe",
+        "/api/uploadthing"
     ],
     ignoredRoutes: [
         "api/webhook/clerk",
@@ -10577,14 +10577,14 @@ const versionSelector = (clerkJSVersion)=>{
     if (clerkJSVersion) {
         return clerkJSVersion;
     }
-    const prereleaseTag = getPrereleaseTag("4.30.3");
+    const prereleaseTag = getPrereleaseTag("4.30.5");
     if (prereleaseTag) {
         if (prereleaseTag === "snapshot") {
-            return "4.68.2";
+            return "4.70.0";
         }
         return prereleaseTag;
     }
-    return getMajorVersion("4.30.3");
+    return getMajorVersion("4.30.5");
 };
 const getPrereleaseTag = (packageVersion)=>packageVersion.match(/-(.*)\./)?.[1];
 const getMajorVersion = (packageVersion)=>packageVersion.split(".")[0];
@@ -10744,6 +10744,9 @@ const _IsomorphicClerk = class _IsomorphicClerk {
         };
         this.addOnLoaded = (cb)=>{
             this.loadedListeners.push(cb);
+            if (this.loaded) {
+                this.emitLoaded();
+            }
         };
         this.emitLoaded = ()=>{
             this.loadedListeners.forEach((cb)=>cb());
@@ -11160,6 +11163,9 @@ const _IsomorphicClerk = class _IsomorphicClerk {
         }
         return __privateGet(this, _instance);
     }
+    static clearInstance() {
+        __privateSet(this, _instance, null);
+    }
     get domain() {
         if (false) {}
         if (typeof __privateGet(this, _domain) === "function") {
@@ -11231,7 +11237,7 @@ const _IsomorphicClerk = class _IsomorphicClerk {
             }
             __webpack_require__.g.Clerk.sdkMetadata = this.options.sdkMetadata ?? {
                 name: "@clerk/clerk-react",
-                version: "4.30.3"
+                version: "4.30.5"
             };
             if (__webpack_require__.g.Clerk?.loaded || __webpack_require__.g.Clerk?.isReady()) {
                 return this.hydrateClerkJS(__webpack_require__.g.Clerk);
@@ -13527,6 +13533,11 @@ const useLoadedIsomorphicClerk = (options)=>{
     react.useEffect(()=>{
         isomorphicClerk.addOnLoaded(()=>setLoaded(true));
     }, []);
+    react.useEffect(()=>{
+        return ()=>{
+            IsomorphicClerk.clearInstance();
+        };
+    }, []);
     return {
         isomorphicClerk,
         loaded
@@ -13961,38 +13972,31 @@ var mergeNextClerkPropsWithEnv = __webpack_require__(7813);
 
 const useAwaitableNavigate = ()=>{
     const { push } = (0,navigation.useRouter)();
-    const pathname = (0,navigation.usePathname)();
-    const params = (0,navigation.useSearchParams)();
-    const urlKey = pathname + params.toString();
-    (0,react.useEffect)(()=>{
-        window.__clerk_nav_ref = (to)=>{
-            if (to === window.location.href.replace(window.location.origin, "")) {
-                push(to);
-                return Promise.resolve();
-            }
+    const [isPending, startTransition] = (0,react.useTransition)();
+    const clerkNavRef = (0,react.useRef)();
+    const clerkNavPromiseBuffer = (0,react.useRef)([]);
+    if (!clerkNavRef.current) {
+        clerkNavRef.current = (to, opts)=>{
             return new Promise((res)=>{
-                if (window.__clerk_nav_resolves_ref) {
-                    window.__clerk_nav_resolves_ref.push(res);
-                } else {
-                    window.__clerk_nav_resolves_ref = [
-                        res
-                    ];
-                }
-                push(to);
+                clerkNavPromiseBuffer.current.push(res);
+                startTransition(()=>{
+                    push(to, opts);
+                });
             });
         };
-    }, [
-        urlKey
-    ]);
+    }
     (0,react.useEffect)(()=>{
-        if (window.__clerk_nav_resolves_ref && window.__clerk_nav_resolves_ref.length) {
-            window.__clerk_nav_resolves_ref.forEach((resolve)=>resolve());
+        if (isPending) {
+            return;
         }
-        window.__clerk_nav_resolves_ref = [];
-    });
-    return (0,react.useCallback)((to)=>{
-        return window.__clerk_nav_ref(to);
-    }, []);
+        if (clerkNavPromiseBuffer?.current?.length) {
+            clerkNavPromiseBuffer.current.forEach((resolve)=>resolve());
+        }
+        clerkNavPromiseBuffer.current = [];
+    }, [
+        isPending
+    ]);
+    return clerkNavRef.current;
 };
  //# sourceMappingURL=useAwaitableNavigate.js.map
 
@@ -14102,7 +14106,7 @@ const mergeNextClerkPropsWithEnv = (props)=>{
         afterSignUpUrl: props.afterSignUpUrl || "/" || 0,
         sdkMetadata: {
             name: "@clerk/nextjs",
-            version: "4.29.5"
+            version: "4.29.7"
         }
     };
 };
